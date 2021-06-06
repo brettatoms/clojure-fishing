@@ -63,7 +63,7 @@
 
 (defn list-item [item]
   [:li
-   {:className "p-4 flex-1"}
+   {:className "py-4 sm:px-4 flex-1"}
    [:div {:className "flex-col items-start"}
     [:div {:className "flex-col sm:flex-row items-baseline"}
      [:span {:className "text-xl"} (. item -name)]
@@ -104,7 +104,8 @@
     [header]
     [:div {:className "w-full flex-col"}
      [search-input {:className "w-full bg-red-500"}]
-     [:span {:className "text-sm text-gray-400"} (str (count @items) " matches")]]
+     (when (> (count @items) 0)
+       [:span {:className "text-sm text-gray-400"} (str (count @items) " matches")])]
 
     [:div {:className "md:py-8"}
      [item-list]]]])
