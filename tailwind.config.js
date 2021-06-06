@@ -6,16 +6,17 @@ module.exports = {
     content:
       process.env.NODE_ENV == "production"
         ? ["./public/js/main.js"]
-        : ["./public/js/cljs-runtime/*.js"],
+        : ["./public/js/cljs-runtime/*.js"]
   },
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
-      },
-    },
+        title: ["Tangerine"]
+      }
+    }
   },
   variants: {},
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/forms")]
 };

@@ -8,7 +8,7 @@ yarn global add shadow-cljs
 ```
 
 ```sh
-npx shadow-cljs watch app
+yarn run shadow-cljs watch app
 ```
 
 ```sh

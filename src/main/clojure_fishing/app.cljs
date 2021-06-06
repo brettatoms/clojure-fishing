@@ -62,10 +62,12 @@
      (if-let [repo-url (aget item "repo_url")]
        [:a {:href repo-url} repo-url]
        "n/a")]
-    [:div
-     (for [text (aget item "tags")]
-       [:div {:className "mx-1"}
-        [tag text]])]]])
+
+    ;; [:div
+    ;;  (for [text (aget item "tags")]
+    ;;    [:div {:className "mx-1"}
+    ;;     [tag text]])]
+    ]])
 
 (defn item-list []
   [:ul {:className "flex-1"}
@@ -75,14 +77,20 @@
       [list-item item]
       [:div {:className "border-gray-100 border  w-full"}]])])
 
+(defn header []
+  [:div  {:className "flex-1 justify-center items-center py-8"}
+   [:img {:src "/img/fishing-clipart-fly-fishing-2.jpg"
+          :width 200
+          :height 160}]
+   [:h1 {:className "font-title text-7xl font-light"} "Clojure Fishing"]])
+
 (defn home-page []
   [:div {:id "home-page"
          :className "flex flex-col w-full"}
    [navbar]
    [:div {:id "container"
-          :className "flex-col px-24 py-8"}
-    [:div  {:className "flex-1 justify-center py-8"}
-     [:h1 {:className "text-xl"} "Clojure Fishing"]]
+          :className "flex-col xl:px-96 lg:px-64 md:px-24 sm:px-12 px-8 py-8"}
+    [header]
     [:div {:className "w-full"}
      [search-input {:className "w-full bg-red-500"}]]
     [:div {:className "py-8"}

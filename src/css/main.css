@@ -1,5 +1,10 @@
 @import "./tailwind.css";
 
+@font-face {
+  font-family: "Tangerine";
+  src: url("/fonts/Tangerine-Regular.ttf"); /* format("truetype"); */
+}
+
 div {
   display: flex;
 }
