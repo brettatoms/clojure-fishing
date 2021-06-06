@@ -89,22 +89,24 @@
       [:div {:className "border-gray-100 border  w-full"}]])])
 
 (defn header []
-  [:div  {:className "flex-1 justify-center items-center py-8"}
+  [:div  {:className "flex-1 justify-center items-center md:py-8"}
    [:img {:src "/img/fishing-clipart-fly-fishing-2.jpg"
           :width 200
           :height 160}]
-   [:h1 {:className "font-title text-7xl font-light"} "Clojure Fishing"]])
+   [:h1 {:className "font-title text-7xl font-light pr-10 md:pr-0"} "Clojure Fishing"]])
 
 (defn home-page []
   [:div {:id "home-page"
          :className "flex flex-col w-full"}
    [navbar]
    [:div {:id "container"
-          :className "flex-col xl:px-96 lg:px-64 md:px-24 sm:px-12 px-8 py-8"}
+          :className "flex-col xl:px-96 lg:px-64 md:px-24 sm:px-12 px-8 md:pb-8 md:pt-0"}
     [header]
-    [:div {:className "w-full"}
-     [search-input {:className "w-full bg-red-500"}]]
-    [:div {:className "py-8"}
+    [:div {:className "w-full flex-col"}
+     [search-input {:className "w-full bg-red-500"}]
+     [:span {:className "text-sm text-gray-400"} (str (count @items) " matches")]]
+
+    [:div {:className "md:py-8"}
      [item-list]]]])
 
 (defn logout-page []
