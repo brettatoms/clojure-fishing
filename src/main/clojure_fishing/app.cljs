@@ -4,7 +4,7 @@
             [clojure-fishing.components :refer [input]]
             [clojure-fishing.env :as env]
             [clojure-fishing.login :as login]
-            [goog.string :as gstring]
+            [goog.string :as gstring :refer [format]]
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reitit.coercion.spec :as rts]
@@ -19,9 +19,13 @@
 (defn search [q]
   (if (and q (not (zero? (.-length  q))))
     (go (let [result (-> @supabase-client
+                         ;; (.rpc "search_projects" #js {:q q})
                          (.from "vw_project")
                          (.select "*")
-                         (.ilike "name" (str "%" q "%"))
+                         ;; TODO: couldn't get the project_search function to
+                         ;; work but this seems fast enough for now...but can't
+                         ;; search tags
+                         (.or (format "description.ilike.%%%s%%,name.ilike.%%%s%%" q q))
                          <p!)
               data (. result -data)]
           (js/console.log data)
