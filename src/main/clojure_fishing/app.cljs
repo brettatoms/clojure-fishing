@@ -4,6 +4,7 @@
             [clojure-fishing.components :refer [input]]
             [clojure-fishing.env :as env]
             [clojure-fishing.login :as login]
+            [goog.string :as gstring]
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reitit.coercion.spec :as rts]
@@ -56,13 +57,16 @@
 (defn list-item [item]
   [:li
    {:className "p-4 flex-1"}
-   [:div {:className "flex-col"}
-    [:span {:className "text-xl"} (. item -name)]
-    [:span {:className "text-sm"}
-     (if-let [repo-url (aget item "repo_url")]
-       [:a {:href repo-url} repo-url]
-       "n/a")]
+   [:div {:className "flex-col items-start"}
+    [:div {:className "flex-row items-baseline"}
+     [:span {:className "text-xl"} (. item -name)]
+     [:span {:className "text-sm text-gray-500 px-8"}
+      (when-let [repo-url (aget item "repo_url")]
+        [:a {:href repo-url} repo-url])]]
 
+    (if-let [description (aget item "description")]
+      [:div {:className "pt-2"} description]
+      (gstring/unescapeEntities "&nbsp;"))
     ;; [:div
     ;;  (for [text (aget item "tags")]
     ;;    [:div {:className "mx-1"}
@@ -96,26 +100,6 @@
     [:div {:className "py-8"}
      [item-list]]]])
 
-;; (defn admin-page []
-;;   [:p "admin page"])
-
-;; (defn login-page []
-;;   [:div
-;;    [:form
-;;     [input {:type "text" :placeholder "email"}]
-;;     [input {:type "text"
-;;             :placeholder "password"}]]])
-
-
-;; (defn new-page []
-;;   [:div
-;;    [:form {:onSubmit #(js/console.og)}
-;;     [input {:placeholder "Name"}]
-;;     [input {:placeholder "url"}]
-;;     [:textarea {:value ""
-;;                 :placeholder "Description"}]]])
-
-
 (defn logout-page []
   (-> @supabase-client .-auth .signOut)
   (set!  (.. js/window -location -href) "/"))
@@ -131,15 +115,10 @@
 (def routes
   [["/" {:name ::home
          :view home-page}]
-   ;; ["/admin" {:name ::admin
-   ;;            :view admin-page}]
    ["/login" {:name ::login
               :view login/login-page}]
    ["/logout" {:name ::logout
-               :view logout-page}]
-   ;; ["/new" {:name ::new
-   ;;          :view new-page}]
-   ])
+               :view logout-page}]])
 
 (defn mount-root []
   (rtfe/start!
