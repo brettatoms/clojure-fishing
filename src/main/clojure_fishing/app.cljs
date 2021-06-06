@@ -29,6 +29,7 @@
                          ;; search tags
                          ;; (.or (gstring/format "description.ilike.%%%s%%,name.ilike.%%%s%%" q q))
                          (.or (str "description.ilike.%%" q "%%,name.ilike.%%" q "%%"))
+                         (.order "name")
                          <p!)
               data (. result -data)]
           (js/console.log data)
