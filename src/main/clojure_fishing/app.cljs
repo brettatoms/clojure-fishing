@@ -65,9 +65,9 @@
   [:li
    {:className "p-4 flex-1"}
    [:div {:className "flex-col items-start"}
-    [:div {:className "flex-row items-baseline"}
+    [:div {:className "flex-col sm:flex-row items-baseline"}
      [:span {:className "text-xl"} (. item -name)]
-     [:span {:className "text-sm text-gray-500 px-8"}
+     [:span {:className "text-sm text-gray-500 sm:px-8"}
       (when-let [repo-url (aget item "repo_url")]
         [:a {:href repo-url} repo-url])]]
 
