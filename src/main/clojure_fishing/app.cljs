@@ -25,7 +25,8 @@
                          ;; TODO: couldn't get the project_search function to
                          ;; work but this seems fast enough for now...but can't
                          ;; search tags
-                         (.or (format "description.ilike.%%%s%%,name.ilike.%%%s%%" q q))
+                         ;; (.or (format "description.ilike.%%%s%%,name.ilike.%%%s%%" q q))
+                         (.or (str "description.ilike.%%" q "%%,name.ilike.%%" q "%%"))
                          <p!)
               data (. result -data)]
           (js/console.log data)
