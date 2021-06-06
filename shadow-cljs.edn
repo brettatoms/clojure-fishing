@@ -14,7 +14,8 @@
  :builds {:app {:target :browser
                 :output-dir "public/js"
                 :asset-path "/js"
-                :compiler-options {:optimizations :simple}
+                ;; :compiler-options {:optimizations :simple
+                ;;                    :infer-externs :auto}
                 :closure-defines {clojure-fishing.env/supabase-url #shadow/env "SUPABASE_URL"
                                   clojure-fishing.env/supabase-anon-key #shadow/env "SUPABASE_ANON_KEY"
                                   clojure-fishing.env/supabase-service-role-key #shadow/env "SUPABASE_SERVICE_ROLE_KEY"}

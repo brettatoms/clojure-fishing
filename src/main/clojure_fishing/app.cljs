@@ -5,6 +5,7 @@
             [clojure-fishing.env :as env]
             [clojure-fishing.login :as login]
             [goog.string :as gstring :refer [format]]
+            [goog.string.format]
             [reagent.core :as r]
             [reagent.dom :as rdom]
             [reitit.coercion.spec :as rts]
@@ -25,8 +26,8 @@
                          ;; TODO: couldn't get the project_search function to
                          ;; work but this seems fast enough for now...but can't
                          ;; search tags
-                         ;; (.or (format "description.ilike.%%%s%%,name.ilike.%%%s%%" q q))
-                         (.or (str "description.ilike.%%" q "%%,name.ilike.%%" q "%%"))
+                         (.or (format "description.ilike.%%%s%%,name.ilike.%%%s%%" q q))
+                         ;; (.or (str "description.ilike.%%" q "%%,name.ilike.%%" q "%%"))
                          <p!)
               data (. result -data)]
           (js/console.log data)
