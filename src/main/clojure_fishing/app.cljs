@@ -113,7 +113,7 @@
        [:span {:className "text-sm text-gray-400"} (str (count @items) " matches")]
        (when (= @search-term "")
          [:div {:className "full-w justify-center text-lg text-gray-500 py-12 text-center italic"}
-          "Search for clojure libraries and frameworks"]))]
+          "Search for open-source Clojure projects"]))]
 
     [:div {:className "md:py-8"}
      [item-list]]]])
@@ -123,12 +123,9 @@
   (set!  (.. js/window -location -href) "/"))
 
 (defn current-page []
-  ;; [:div
   (when @route
     (let [view (:view (:data @route))]
-      [view @route]))
-   ;; ]
-  )
+      [view @route])))
 
 (def routes
   [["/" {:name ::home
