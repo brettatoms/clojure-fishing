@@ -1,7 +1,5 @@
 (ns clojure-fishing.app
-  (:require [cljs.core.async :refer [go]]
-            [cljs.core.async.interop :refer-macros [<p!]]
-            [clojure-fishing.components :refer [input]]
+  (:require [clojure-fishing.components :refer [input]]
             [clojure-fishing.env :as env]
             [clojure-fishing.login :as login]
             ;; [goog.string :as gstring :refer [format]]
@@ -17,30 +15,36 @@
 (defonce supabase-client (r/atom (sb/createClient env/supabase-url env/supabase-anon-key)))
 (defonce items (r/atom []))
 (defonce route (r/atom nil))
+(defonce search-term (r/atom ""))
 
-(defn search [q]
-  (if (and q (not (zero? (.-length  q))))
-    (go (let [result (-> @supabase-client
-                         ;; (.rpc "search_projects" #js {:q q})
-                         (.from "vw_project")
-                         (.select "*")
-                         ;; TODO: couldn't get the project_search function to
-                         ;; work but this seems fast enough for now...but can't
-                         ;; search tags
-                         ;; (.or (gstring/format "description.ilike.%%%s%%,name.ilike.%%%s%%" q q))
-                         (.or (str "description.ilike.%%" q "%%,name.ilike.%%" q "%%"))
-                         (.order "name")
-                         <p!)
-              data (. result -data)]
-          (js/console.log data)
-          (reset! items data)))
-    (reset! items [])))
+(defn search
+  "Returns a promise with the search results"
+  [q]
+  (-> @supabase-client
+      ;; (.rpc "search_projects" #js {:q q})
+      (.from "vw_project")
+      (.select "*")
+      ;; TODO: couldn't get the project_search function to
+      ;; work but this seems fast enough for now...but can't
+      ;; search tags
+      ;; (.or (gstring/format "description.ilike.%%%s%%,name.ilike.%%%s%%" q q))
+      (.or (str "description.ilike.%%" q "%%,name.ilike.%%" q "%%"))
+      (.order "name")))
 
 (defn search-input []
   [:input {:type "search"
            :placeholder "Go fishing..."
            :className "flex-1"
-           :onChange #(search (.. % -target -value))}])
+           :value @search-term
+           :onChange (fn [e]
+                       (let [q (.. e -target -value)]
+                         (reset! search-term q)
+                         (if (and q (not (zero? (.-length q))))
+                           (-> (search q)
+                               (.then #(reset! items (. % -data)))
+                               ;; TODO: handle error
+                               (.catch #(reset! items %)))
+                           (reset! items []))))}])
 
 (defn search-params
   ([]
@@ -105,8 +109,11 @@
     [header]
     [:div {:className "w-full flex-col"}
      [search-input {:className "w-full bg-red-500"}]
-     (when (> (count @items) 0)
-       [:span {:className "text-sm text-gray-400"} (str (count @items) " matches")])]
+     (if (or (not= @search-term "") (> (count @items) 0))
+       [:span {:className "text-sm text-gray-400"} (str (count @items) " matches")]
+       (when (= @search-term "")
+         [:div {:className "full-w justify-center text-lg text-gray-500 py-12 text-center italic"}
+          "Search for clojure libraries and frameworks"]))]
 
     [:div {:className "md:py-8"}
      [item-list]]]])
