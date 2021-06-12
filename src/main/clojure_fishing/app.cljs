@@ -74,7 +74,10 @@
      [:span {:className "text-xl"} (. item -name)]
      [:span {:className "text-sm text-gray-500 sm:px-8"}
       (when-let [repo-url (aget item "repo_url")]
-        [:a {:href repo-url} repo-url])]]
+        [:a {:href repo-url} repo-url])]
+     [:span {:className "text-sm text-gray-500 sm:px-8"}
+      (when-let [stars-count (aget item "stars_count")]
+        (str stars-count " stars"))]]
 
     (if-let [description (aget item "description")]
       [:div {:className "pt-2"} description]
